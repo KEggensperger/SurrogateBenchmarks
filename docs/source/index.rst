@@ -9,8 +9,11 @@ Welcome to SurrogateBenchmarks's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
+   ingredients
+   install
+   benchmarks
 
 
 Indices and tables
