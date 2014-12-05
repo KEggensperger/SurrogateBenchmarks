@@ -28,7 +28,7 @@ def kill_server(socket_name, buffer_size=1024, end_str="."*10):
 
 
 def main():
-    prog = "python train_and_daemonize_benchmark.py"
+    prog = "python daemonize_benchmark.py"
     parser = ArgumentParser(description="", prog=prog)
 
     group = parser.add_mutually_exclusive_group(required=True)
