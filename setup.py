@@ -56,10 +56,10 @@ package_dir = {'Surrogates': 'Surrogates',
 #                                             'conditional_gp/*/*.py'))
 #                }
 
-scripts = [ 'Surrogates/scripts/regression_performance.py', #'Surrogates/scripts/make_data',
-           'Surrogates/scripts/regression_performance_looo.py', 'Surrogates/scripts/extract.py',
-           'Surrogates/scripts/trainer.py', 'Surrogates/scripts/daemon_benchmark.py',
-           'Surrogates/scripts/daemonize_benchmark.py', 'Surrogates/scripts/daemon_whisperer.py']
+scripts = ['scripts/regression_performance.py', 'scripts/make_data',
+           'scripts/regression_performance_looo.py', 'scripts/extract.py',
+           'scripts/trainer.py', 'scripts/daemon_benchmark.py',
+           'scripts/daemonize_benchmark.py', 'scripts/daemon_whisperer.py']
 
 
 def get_find_packages():
