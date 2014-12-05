@@ -10,7 +10,8 @@ numpy.random.seed(RNG)
 
 from Surrogates.DataExtraction.data_util import read_csv
 from Surrogates.DataExtraction import pcs_parser
-from Surrogates.RegressionModels import ArcGP, Fastrf, GaussianProcess, GradientBoosting, KNN, LassoRegression, \
+#from Surrogates.RegressionModels import ArcGP, Fastrf, GaussianProcess
+from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression, \
     LinearRegression, NuSupportVectorRegression, RidgeRegression, SupportVectorRegression, RandomForest, RFstruct
 
 __author__ = 'eggenspk'

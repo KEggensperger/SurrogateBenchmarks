@@ -37,7 +37,7 @@ class KNN(ScikitBaseClass.ScikitBaseClass):
 
     def __init__(self, sp, encode, rng=1, **kwargs):
         ScikitBaseClass.ScikitBaseClass.__init__(self, sp=sp, encode=encode, rng=rng, **kwargs)
-        self._name = "NuSVR " + str(encode)
+        self._name = "KNN " + str(encode)
 
     def _random_search(self, random_iter, x, y):
         # Default Values

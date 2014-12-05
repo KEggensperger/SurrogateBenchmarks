@@ -5,17 +5,18 @@ import glob
 
 here = os.path.abspath(os.path.dirname(__file__))
 desc = 'A software that can be used to build surrogates'
-keywords = 'hyperparameter optimization empirical evaluation black box'
+keywords = 'hyperparameter optimization empirical evaluation surrogate benchmark'
 
 package_dir = {'Surrogates': 'Surrogates',
                'Surrogates.DataExtraction': 'Surrogates/DataExtraction',
                'Surrogates.RegressionModels': 'Surrogates/RegressionModels',
-               'Surrogates.SurrogateBenchmarks': 'Surrogates/SurrogateBenchmarks',
+               'Surrogates.SurrogateBenchmarks': 'Surrogates/SurrogateBenchmarks'
+               }
                #'Surrogates.RegressionModels.RandomForests':
                # 'Surrogates/RegressionModels/RandomForests',
                #'Surrogates.RegressionModels.RandomForests.pyfastrf':
                # 'Surrogates/RegressionModels/RandomForests/pyfastrf'
-               }
+               #}
 
 #conditional_gp = glob.glob(os.path.join(here, 'Surrogates/RegressionModels/'
 #                                              'conditional_gp/*.py'))
@@ -65,10 +66,10 @@ scripts = ['scripts/regression_performance.py', 'scripts/make_data',
 def get_find_packages():
     packages = ['Surrogates',
                 'Surrogates.DataExtraction',
-                'Surrogates.RegressionModels',
+                'Surrogates.RegressionModels']
                 #'Surrogates.RegressionModels.RandomForests',
                 #'Surrogates.RegressionModels.RandomForests.pyfastrf'
-                ]
+
     return packages
 
 setup(
@@ -84,8 +85,8 @@ setup(
                       'networkx',
                       'scipy==0.14.0',
                       'pyparsing',
-                      'nose',
-                      'scikit-learn', #==0.15.1',
+                      #'nose',
+                      'scikit-learn==0.15.1',
                       'python-daemon'
                       ],
     author_email='eggenspk@informatik.uni-freiburg.de',

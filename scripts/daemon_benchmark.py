@@ -15,8 +15,10 @@ import daemon
 RNG = 1
 numpy.random.seed(RNG)
 
-from Surrogates.RegressionModels import ArcGP, Fastrf, GaussianProcess, GradientBoosting, KNN, LassoRegression, \
+from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression, \
      LinearRegression, NuSupportVectorRegression, RidgeRegression, SupportVectorRegression, RandomForest
+
+# ArcGP, Fastrf, GaussianProcess
 
 import Surrogates.DataExtraction.handle_configurations
 
