@@ -2,7 +2,8 @@ Surrogate Benchmarks: Cheap-to-evaluate, but realistic hyperparameter optimizati
 ===============================================================
 
 This library provides tools to build and use surrogate benchmarks to evaluate
-and compare hyperparameter optimization methods. [http://hpolib.readthedocs.org](http://hpolib.readthedocs.org).
+and compare hyperparameter optimization methods.
+You can find the documentation here: [http://hpolib.readthedocs.org](http://hpolib.readthedocs.org).
 
 
 This software is licensed under the GPL license. You find the license text
