@@ -1,0 +1,68 @@
+#! /bin/bash
+
+echo Reading data from: ${1}
+echo Saving data to: ${2}
+echo PCS-File: ${3}
+echo "Is this ok?"
+read data
+
+if [ ! -e $3 ]
+then
+    echo ${3} is not a valid .pcs file
+    exit 1
+fi
+PCS=${3}
+
+BASE=${2}
+ALL=${2}\_all
+WOTPE=${2}\_wo_hyperopt
+WOSMAC=${2}\_wo_smac
+WOSPEAR=${2}\_wo_spearmint
+WORAND=${2}\_wo_random
+
+echo $ALL
+echo $WOTPE
+echo $WOSMAC
+echo $WOSPEAR
+echo $WORAND
+
+TPESRC=${1}/hyperopt*_*/h*.pkl
+SMACSRC=${1}/smac*_*/s*.pkl
+SPEARSRC=${1}/spearmint*_*/sp*.pkl
+RANDSRC=${1}/random*_*/r*.pkl
+
+echo Retrieving Information from
+echo $TPESRC
+echo $SMACSRC
+echo $SPEARSRC
+echo $RANDSRC
+echo
+
+echo "Is this ok?"
+read data
+
+if [ -d ${ALL} ]
+then
+    echo $ALL already exists .. aborting
+    exit 1
+fi
+
+mkdir $ALL
+extract.py --pcs $PCS $TPESRC $SMACSRC $SPEARSRC $RANDSRC -s $ALL/$ALL >> $ALL/extract.output
+
+mkdir $WOTPE
+extract.py --pcs $PCS $SMACSRC $SPEARSRC $RANDSRC -s $WOTPE/$WOTPE >> $WOTPE/extract_all.output
+extract.py --pcs $PCS --pcs $PCS $TPESRC -s $WOTPE/TEST_$BASE\_hyperopt >> $WOTPE/extract_TEST.output
+
+mkdir $WOSMAC
+extract.py --pcs $PCS $TPESRC $SPEARSRC $RANDSRC -s $WOSMAC/$WOSMAC >> $WOSMAC/extract_all.output
+extract.py --pcs $PCS $SMACSRC -s $WOSMAC/TEST_$BASE\_smac >> $WOSMAC/extract_TEST.output
+
+mkdir $WOSPEAR
+extract.py --pcs $PCS $TPESRC $SMACSRC $RANDSRC -s $WOSPEAR/$WOSPEAR >> $WOSPEAR/extract_all.output
+extract.py --pcs $PCS $SPEARSRC -s $WOSPEAR/TEST_$BASE\_spearmint >> $WOSPEAR/extract_TEST.output
+
+mkdir $WORAND
+extract.py --pcs $PCS $TPESRC $SMACSRC $SPEARSRC -s $WORAND/$WORAND >> $WORAND/extract_all.output
+extract.py --pcs $PCS $RANDSRC -s $WORAND/TEST_$BASE\_random >> $WORAND/extract_TEST.output
+
