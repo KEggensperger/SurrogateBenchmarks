@@ -52,7 +52,7 @@ def main():
 
     # We are here, so we have to build a call
     # Prepare call
-    cmd = ["python", os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
+    cmd = ["daemon_benchmark.py", #os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
            "--socket", os.path.abspath(args.socket), "--data", str(args.surrogate_data), "--pcs", str(args.pcs)]
 
     sys.stdout.write(" ".join(cmd) + "\n")
