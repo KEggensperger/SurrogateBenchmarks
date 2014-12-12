@@ -3,7 +3,6 @@
 from argparse import ArgumentParser
 
 import os
-import sys
 import tempfile
 
 import numpy
@@ -13,14 +12,17 @@ numpy.random.seed(RNG)
 
 from sklearn import cross_validation
 
-from Surrogates.RegressionModels import ArcGP, Fastrf, GaussianProcess, GradientBoosting, KNN, LassoRegression,\
-                                        LinearRegression, NuSupportVectorRegression, RidgeRegression, \
-                                        SupportVectorRegression, RandomForest, RFstruct
+from Surrogates.RegressionModels import ArcGP, Fastrf, GaussianProcess
+from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression
+from Surrogates.RegressionModels import LinearRegression, RidgeRegression
+from Surrogates.RegressionModels import NuSupportVectorRegression, RandomForest
+from Surrogates.RegressionModels import SupportVectorRegression, RFstruct
 
 import Surrogates.DataExtraction.pcs_parser as pcs_parser
-from Surrogates.DataExtraction.data_util import read_csv, save_one_line_to_csv, init_csv
+from Surrogates.DataExtraction.data_util import read_csv, save_one_line_to_csv
 
-
+"""
+# Comment this out, till we can be sure it is not needed
 def write_truth(train_idx, test_idx, data, fn, num_cv, dir="/tmp/"):
     train_fn = fn + "training.csv"
     test_fn = fn + "test.csv"
@@ -43,7 +45,7 @@ def write_truth(train_idx, test_idx, data, fn, num_cv, dir="/tmp/"):
     print train_tmp, train_fn
     os.rename(train_tmp, train_fn)
     os.rename(test_tmp, test_fn)
-
+"""
 
 def main():
     prog = "python whole_training.py"

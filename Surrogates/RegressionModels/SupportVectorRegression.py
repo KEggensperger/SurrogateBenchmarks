@@ -82,7 +82,6 @@ class SupportVectorRegression(ScikitBaseClass.ScikitBaseClass):
         start = time.time()
         scaled_x = self._set_and_preprocess(x=x, param_names=param_names)
 
-
         # Check that each input is between 0 and 1
         self._check_scaling(scaled_x=scaled_x)
 
@@ -93,7 +92,8 @@ class SupportVectorRegression(ScikitBaseClass.ScikitBaseClass):
             print "Encode: ", self._encode
 
         # Do a random search
-        c, gamma = self._random_search(random_iter=100, x=scaled_x, y=y, kernel_cache_size=kernel_cache_size)
+        c, gamma = self._random_search(random_iter=random_search, x=scaled_x,
+                                       y=y, kernel_cache_size=kernel_cache_size)
 
         # Now train model
         try:
@@ -107,6 +107,10 @@ class SupportVectorRegression(ScikitBaseClass.ScikitBaseClass):
         self._training_finished = True
         return duration
 
+    @property
+    def model(self):
+        return self._model
+
 
 def test():
     from sklearn.metrics import mean_squared_error
@@ -116,8 +120,8 @@ def test():
     header, data = read_csv("/home/eggenspk/Surrogates/Data_extraction/hpnnet_nocv_convex_all/hpnnet_nocv_convex_all_fastrf_results.csv",
                             has_header=True, num_header_rows=3)
     para_header = header[0]
-    type_header = header[1]
-    cond_header = header[2]
+    # type_header = header[1]
+    # cond_header = header[2]
     checkpoint = hash(numpy.array_repr(data))
     assert checkpoint == 246450380584980815
 
@@ -128,10 +132,10 @@ def test():
     y_test_data = data[1000:, -1]
 
     model.train(x=x_train_data, y=y_train_data, param_names=para_header)
-    print model._scale_info
-    assert model._model.get_params()['gamma'] == 0.015625, "%100.20f" % model._model.get_params()['gamma']
-    assert model._model.get_params()['C'] == 256, "%100.20f" % model._model.get_params()['C']
-    print model._model.get_params()
+    print model.scale_info
+    assert model.model.get_params()['gamma'] == 0.015625, "%100.20f" % model._model.get_params()['gamma']
+    assert model.model.get_params()['C'] == 256, "%100.20f" % model._model.get_params()['C']
+    print model.model.get_params()
 
     y = model.predict(x=x_train_data[1, :])
     print "Is: %100.70f, Should: %f" % (y, y_train_data[1])

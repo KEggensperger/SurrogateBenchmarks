@@ -132,3 +132,7 @@ class ScikitBaseClass(RegressionBaseClass.RegressionBaseClass):
         #    print i
         #    print x_copy[0, idx]
         return self._model.predict(x_copy)
+
+    @property
+    def scale_info(self):
+        return self._scale_info
