@@ -70,33 +70,48 @@ def main():
 
     # IPC infos
     parser.add_argument("--socket", dest="socket", default=None, required=True,
-                        help="Where to create socket?")
+                        help="To which socket listens the daemon?")
     parser.add_argument("--data", dest="data", default=None,
                         help="In case of trouble, shall I try to resurrect daemon?")
     parser.add_argument("--pcs", dest="pcs", default=None,
                         help="In case of trouble, shall I try to resurrect daemon?")
     args, unknown = parser.parse_known_args()
 
-    # Talk to demon
+    socket_dir = args.socket
+    if not os.path.isabs(socket_dir):
+        socket_dir = os.path.normpath(os.path.abspath(socket_dir))
+
+    surrogate_data = args.data
+    if surrogate_data and not os.path.isabs(surrogate_data):
+            surrogate_data = os.path.normpath(os.path.abspath(surrogate_data))
+
+    pcs_file = args.pcs
+    if pcs_file and not os.path.isabs(pcs_file):
+        pcs_file = os.path.normpath(os.path.abspath(pcs_file))
+
+    # Talk to daemon
     print unknown
 
     start = time.time()
-    res = evaluate_config(socket_name=args.socket, params=" ".join(unknown)) # "--fold " + str(args.fold) + " " + " ".join(unknown))
+    res = evaluate_config(socket_name=socket_dir, params=" ".join(unknown)) # "--fold " + str(args.fold) + " " + " ".join(unknown))
     
-    if args.data is not None and args.pcs is not None and type(res) == str and (res == "Could not connect to socket" or "does not exist" in res):
+    if surrogate_data is not None and pcs_file is not None and \
+            type(res) == str and \
+            (res == "Could not connect to socket" or "does not exist" in res):
         print "Daemon seems to be dead"
-        if os.path.exists(args.socket):
-            os.remove(args.socket)       
+        if os.path.exists(socket_dir):
+            os.remove(socket_dir)
 
-        cmd = ["python", os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
-           "--socket", os.path.abspath(args.socket), "--data", args.data, "--pcs", args.pcs, "--daemon"]
+        cmd = ["daemon_benchmark.py", #"python ",  #os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
+               "--socket", socket_dir, "--data", surrogate_data,
+               "--pcs", pcs_file, "--daemon"]
         p = subprocess.Popen(cmd)
         sys.stdout.write(" ".join(cmd) + "\n")
 
         try_ct = 0
         works = False
         while not works and try_ct < 20:
-            answer = whisper(socket_name=args.socket, message="SayHello")
+            answer = whisper(socket_name=socket_dir, message="SayHello")
             print "Daemon answers: ", answer
             if answer == "Hello =)":
                 works = True
@@ -109,7 +124,7 @@ def main():
             raise ValueError("Socket is broken and daemon not repairable: %s" % str(args))
         
         # Now try one more time
-        res = evaluate_config(socket_name=args.socket, params=" ".join(unknown))
+        res = evaluate_config(socket_name=socket_dir, params=" ".join(unknown))
         
     duration = time.time() - start
     res_str = format_return_string(res=res, duration=duration)

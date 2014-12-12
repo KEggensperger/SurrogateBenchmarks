@@ -52,8 +52,20 @@ def main():
 
     # We are here, so we have to build a call
     # Prepare call
+    socket_dir = args.socket
+    if not os.path.isabs(socket_dir):
+        socket_dir = os.path.normpath(os.path.abspath(socket_dir))
+
+    surrogate_data = args.surrogate_data
+    if not os.path.isabs(surrogate_data):
+        surrogate_data = os.path.normpath(os.path.abspath(surrogate_data))
+
+    pcs_file = args.pcs
+    if not os.path.isabs(pcs_file):
+        pcs_file = os.path.normpath(os.path.abspath(pcs_file))
+
     cmd = ["daemon_benchmark.py", #os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
-           "--socket", os.path.abspath(args.socket), "--data", str(args.surrogate_data), "--pcs", str(args.pcs)]
+           "--socket", socket_dir, "--data", surrogate_data, "--pcs", pcs_file]
 
     sys.stdout.write(" ".join(cmd) + "\n")
 
