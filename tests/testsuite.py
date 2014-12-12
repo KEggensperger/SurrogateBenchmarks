@@ -9,10 +9,18 @@ import unittests.RidgeRegressionTest
 import unittests.ScalerTest
 import unittests.SupportVectorTest
 import unittests.RemoveInactive
+import unittests.TestDependenciesVersions
 
 
 def suite():
     _suite = unittest.TestSuite()
+    _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
+                                      TestNumpyVersion))
+    _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
+                                      TestScipyVersion))
+    _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
+                                      TestScikitLearnVersion))
+
     for i in range(2):
         #_suite.addTest(unittest.makeSuite(unittests.ArcGPTest.ArcGPTest))
         #_suite.addTest(unittest.makeSuite(unittests.ArcGPTest.ArcGPTest))
@@ -31,6 +39,7 @@ def suite():
                                           SupportVectorRegressionTest))
         _suite.addTest(unittest.makeSuite(unittests.RemoveInactive.
                                           RemoveInactive))
+
     return _suite
 
 
