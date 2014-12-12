@@ -48,7 +48,7 @@ class LinearRegressionTest(unittest.TestCase):
 
         y = model.predict(x=x_train_data[1])
         #print "Is: %100.70f, Should: %f" % (y, y_train_data[1])
-        self.assertAlmostEqual(y[0], 0.337924630401289560754918284) # 0.337924630401289560754918284146697260439395904541015625
+        self.assertAlmostEqual(y[0], 0.337924630401289560754918284)
         self.assertEqual(y, y1)
 
         #print "Predict whole data"
@@ -58,9 +58,11 @@ class LinearRegressionTest(unittest.TestCase):
         self.assertAlmostEqual(mse, 0.009198984490357622889611377)
 
         # Try the same with encoded features
-        model = Surrogates.RegressionModels.LinearRegression.LinearRegression(sp=self._sp, rng=1, encode=True, debug=True)
+        model = Surrogates.RegressionModels.LinearRegression.\
+            LinearRegression(sp=self._sp, rng=1, encode=True, debug=True)
         #print data[:10, :-2]
-        model.train(x=x_train_data, y=y_train_data, param_names=self._para_header, rng=1)
+        model.train(x=x_train_data, y=y_train_data,
+                    param_names=self._para_header, rng=1)
 
         y = model.predict(x=self._data[1, :-2])
         #print "Is: %100.70f, Should: %f" % (y, self._data[1, -2])
@@ -72,7 +74,8 @@ class LinearRegressionTest(unittest.TestCase):
         #print "MSE: %100.70f" % mse
         self.assertAlmostEqual(mse, 0.0091497876001024742)
 
-        fn = os.path.join(os.path.dirname(os.path.realpath(__file__)), "Testdata/testLinear.pkl")
+        fn = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                          "Testdata/testLinear.pkl")
         fh = open(fn, "wb")
         cPickle.dump(model, fh)
         fh.close()
