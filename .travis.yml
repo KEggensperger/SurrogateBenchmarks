@@ -4,7 +4,7 @@ python:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 
 before_install:
-- sudo apt-get install libatlas-base-dev
+- sudo apt-get install libatlas-base-dev gfortran
 #- sudo apt-get install -q libatlas3gf-base libatlas-dev liblapack-dev gfortran
 
 install:
