@@ -10,9 +10,11 @@ numpy.random.seed(RNG)
 
 from Surrogates.DataExtraction.data_util import read_csv
 from Surrogates.DataExtraction import pcs_parser
-#from Surrogates.RegressionModels import ArcGP, Fastrf, GaussianProcess
-from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression, \
-    LinearRegression, NuSupportVectorRegression, RidgeRegression, SupportVectorRegression, RandomForest, RFstruct
+# from Surrogates.RegressionModels import ArcGP, RFstruct
+from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression
+from Surrogates.RegressionModels import LinearRegression, RidgeRegression
+from Surrogates.RegressionModels import SupportVectorRegression #, GaussianProcess,
+from Surrogates.RegressionModels import RandomForest, NuSupportVectorRegression
 
 __author__ = 'eggenspk'
 
@@ -23,15 +25,19 @@ def main():
 
     # Data stuff for training surrogate
     parser.add_argument("-m", "--model", dest="model", default=None, required=True,
-                        help="What model?", choices=["ArcGP", "RFstruct", "Fastrf", "GaussianProcess",
-                                                     "GradientBoosting", "KNN", "LassoRegression",
-                                                     "LinearRegression", "NuSupportVectorRegression",
-                                                     "RidgeRegression", "SupportVectorRegression", "RandomForest"])
+                        help="What model?",
+                        choices=[#"ArcGP", "RFstruct",
+                                 # "GaussianProcess",
+                                 "GradientBoosting", "KNN", "LassoRegression",
+                                 "LinearRegression", "SupportVectorRegression",
+                                 "RidgeRegression", "NuSupportVectorRegression",
+                                 "RandomForest"])
     parser.add_argument("--data", dest="data_fn", default=None, required=True,
                         help="Where is the csv with training data?")
     parser.add_argument("--pcs", dest="pcs", default=None, required=False,
                         help="Smac pcs file for this experiment")
-    parser.add_argument("--encode", dest="encode", default=False, action="store_true")
+    parser.add_argument("--encode", dest="encode", default=False,
+                        action="store_true")
     parser.add_argument("--saveto", dest="saveto", required=True)
 
     args, unknown = parser.parse_known_args()
@@ -55,14 +61,14 @@ def main():
     # Read data from csv
     header, data = read_csv(args.data_fn, has_header=True, num_header_rows=3)
     para_header = header[0][:-2]
-    type_header = header[1][:-2]
-    cond_header = header[2][:-2]
+    #type_header = header[1][:-2]
+    #cond_header = header[2][:-2]
 
     # Cut out the objective
     data_x = data[:, :-2]
     data_y = data[:, -1]   # -1 -> perf, -2 -> duration
 
-     # Save hash to check whether we changed something during training
+    # Save hash to check whether we changed something during training
     data_x_hash = hash(numpy.array_repr(data_x))
     data_y_hash = hash(data_y.tostring())
 
@@ -75,9 +81,10 @@ def main():
     if model.maximum_number_train_data() < train_data_x.shape[0]:
         max_n = model.maximum_number_train_data()
         print "Limited model, reducing #data from %d" % train_data_x.shape[0]
-        train_data_x, _n_x, train_data_y, _n_y = cross_validation.train_test_split(train_data_x, train_data_y,
-                                                                                   train_size=max_n,
-                                                                                   random_state=RNG)
+        train_data_x, _n_x, train_data_y, _n_y = \
+            cross_validation.train_test_split(train_data_x, train_data_y,
+                                              train_size=max_n,
+                                              random_state=RNG)
         print "to %d" % train_data_x.shape[0]
     else:
         print "Reducing data not neccessary"
@@ -86,10 +93,13 @@ def main():
 
     print "Training took %fsec" % dur
 
-    if args.model == "Fastrf":
+    if args.model == "Fastrf" or "RFstruct":
         # We need to save the forest
         print "Saved forest to %s" % saveto
         model.save_forest(fn=saveto + "_forest")
+
+    assert(data_x_hash, hash(numpy.array_repr(data_x)))
+    assert(data_y_hash, hash(data_y.tostring()))
 
     fn = open(saveto, "wb")
     cPickle.dump(obj=model, file=fn, protocol=cPickle.HIGHEST_PROTOCOL)
@@ -98,10 +108,9 @@ def main():
 
 
 def fetch_model(model_name):
-    options = {"ArcGP": ArcGP.ArcGP,
-               "RFstruct": RFstruct.RFstruct,
-               "Fastrf": Fastrf.FastRF,
-               "GaussianProcess": GaussianProcess.GaussianProcess,
+    options = {#"ArcGP": ArcGP.ArcGP,
+               #"RFstruct": RFstruct.RFstruct,
+               #"GaussianProcess": GaussianProcess.GaussianProcess,
                "GradientBoosting": GradientBoosting.GradientBoosting,
                "KNN": KNN.KNN,
                "LassoRegression": LassoRegression.LassoRegression,
@@ -110,7 +119,7 @@ def fetch_model(model_name):
                "RidgeRegression": RidgeRegression.RidgeRegression,
                "SupportVectorRegression": SupportVectorRegression.SupportVectorRegression,
                "RandomForest": RandomForest.RandomForest
-               }
+              }
     return options[model_name]
 
 if __name__ == "__main__":
