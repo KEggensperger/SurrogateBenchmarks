@@ -98,8 +98,8 @@ def main():
         print "Saved forest to %s" % saveto
         model.save_forest(fn=saveto + "_forest")
 
-    assert(data_x_hash, hash(numpy.array_repr(data_x)))
-    assert(data_y_hash, hash(data_y.tostring()))
+    assert data_x_hash, hash(numpy.array_repr(data_x))
+    assert data_y_hash, hash(data_y.tostring())
 
     fn = open(saveto, "wb")
     cPickle.dump(obj=model, file=fn, protocol=cPickle.HIGHEST_PROTOCOL)
