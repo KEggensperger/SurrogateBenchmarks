@@ -2,10 +2,12 @@ language: python
 python:
 - "2.7"
 
-cache: apt
-cache: pip
+cache:
+- apt
+- pip
 
-env: TRAVISCI=TRUE
+env:
+- TRAVISCI=TRUE
 
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
@@ -17,9 +19,9 @@ install:
 - easy_install -U distribute
 - pip install numpy==1.8.1
 - pip install scipy==0.14.0
-- pip install matplotlib
+# - pip install matplotlib
 - pip install scikit-learn==0.15.1
-- pip install matplotlib
 - python setup.py install
+
 # command to run tests, e.g. python setup.py test
 script: python setup.py test

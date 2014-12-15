@@ -15,12 +15,7 @@ import unittests.TestDependenciesVersions
 def suite():
     _suite = unittest.TestSuite()
     _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
-                                      TestNumpyVersion))
-    _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
-                                      TestScipyVersion))
-    _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
-                                      TestScikitLearnVersion))
-
+                                      TestDependenciesVersion))
     for i in range(2):
         #_suite.addTest(unittest.makeSuite(unittests.ArcGPTest.ArcGPTest))
         #_suite.addTest(unittest.makeSuite(unittests.ArcGPTest.ArcGPTest))
