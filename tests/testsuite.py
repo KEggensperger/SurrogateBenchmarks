@@ -17,10 +17,9 @@ def suite():
     _suite = unittest.TestSuite()
     _suite.addTest(unittest.makeSuite(unittests.TestDependenciesVersions.
                                       TestDependenciesVersion))
-    _suite.addTest(unittest.makeSuite(unittests.KNNTest.KNNTest))
-    """
     for i in range(2):
         #_suite.addTest(unittest.makeSuite(unittests.ArcGPTest.ArcGPTest))
+        _suite.addTest(unittest.makeSuite(unittests.KNNTest.KNNTest))
         _suite.addTest(unittest.makeSuite(unittests.RandomForestTest.
                                           RandomForestTest))
         _suite.addTest(unittest.makeSuite(unittests.RidgeRegressionTest.
@@ -36,7 +35,6 @@ def suite():
                                           SupportVectorRegressionTest))
         _suite.addTest(unittest.makeSuite(unittests.RemoveInactive.
                                           RemoveInactive))
-    """
 
     return _suite
 
