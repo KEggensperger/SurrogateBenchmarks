@@ -10,6 +10,9 @@ You can find the documentation here:
 This software is licensed under the GPL license. You find the license text
 shipped with this package.
 
+The code used for the Gaussian Process is part of the spearmint package, which can be found here:
+[https://github.com/JasperSnoek/spearmint](https://github.com/JasperSnoek/spearmint)
+
 Master branch
 ---
 Documentation

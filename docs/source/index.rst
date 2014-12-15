@@ -13,6 +13,7 @@ Contents:
 
    ingredients
    install
+   run
    benchmarks
 
 
