@@ -10,7 +10,10 @@ keywords = 'hyperparameter optimization empirical evaluation surrogate benchmark
 package_dir = {'Surrogates': 'Surrogates',
                'Surrogates.DataExtraction': 'Surrogates/DataExtraction',
                'Surrogates.RegressionModels': 'Surrogates/RegressionModels',
-               'Surrogates.SurrogateBenchmarks': 'Surrogates/SurrogateBenchmarks'
+               'Surrogates.RegressionModels.GaussianProcess_src':
+                   'Surrogates/RegressionModels/GaussianProcess_src',
+               'Surrogates.RegressionModels.GaussianProcess_src.spearmint':
+                   'Surrogates/RegressionModels/GaussianProcess_src/spearmint'
                }
                #'Surrogates.RegressionModels.RandomForests':
                # 'Surrogates/RegressionModels/RandomForests',
@@ -66,7 +69,9 @@ scripts = ['scripts/regression_performance.py', 'scripts/make_data',
 def get_find_packages():
     packages = ['Surrogates',
                 'Surrogates.DataExtraction',
-                'Surrogates.RegressionModels']
+                'Surrogates.RegressionModels',
+                'Surrogates.RegressionModels.GaussianProcess_src',
+                'Surrogates.RegressionModels.GaussianProcess_src.spearmint']
                 #'Surrogates.RegressionModels.RandomForests',
                 #'Surrogates.RegressionModels.RandomForests.pyfastrf'
 

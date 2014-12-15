@@ -16,11 +16,12 @@ numpy.random.seed(RNG)
 
 from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression, \
      LinearRegression, NuSupportVectorRegression, RidgeRegression, \
-    SupportVectorRegression, RandomForest
+     SupportVectorRegression, RandomForest, GaussianProcess
 
 # ArcGP, Fastrf, GaussianProcess
 
 import Surrogates.DataExtraction.handle_configurations
+import Surrogates.DataExtraction.configuration_space
 
 
 def parse_cli(misc_args):
@@ -98,11 +99,11 @@ def build_input_array(params, other, sp, unimap, logdict, cond_dict, param_names
         if i[0] == "-":
             tmp_i = i[1:]
         if isinstance(sp[unimap[tmp_i]], Surrogates.DataExtraction.
-                configuration_space.CategoricalHyperparameter):
+                      configuration_space.CategoricalHyperparameter):
             clean_dict[tmp_i] = params[i].strip(" ").strip("'").strip('"')
         else:
-            clean_dict[tmp_i] = Surrogates.DataExtraction.handle_configurations.\
-                convert_to_number(params[i])
+            clean_dict[tmp_i] = Surrogates.DataExtraction.\
+                handle_configurations.convert_to_number(params[i])
     print "CLEAN", clean_dict
     
     # Unlog parameter

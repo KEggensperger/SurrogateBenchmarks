@@ -64,8 +64,8 @@ def main():
     if not os.path.isabs(pcs_file):
         pcs_file = os.path.normpath(os.path.abspath(pcs_file))
 
-    cmd = ["daemon_benchmark.py", #os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
-           "--socket", socket_dir, "--data", surrogate_data, "--pcs", pcs_file]
+    cmd = ["daemon_benchmark.py", "--socket", socket_dir, "--data",
+           surrogate_data, "--pcs", pcs_file]
 
     sys.stdout.write(" ".join(cmd) + "\n")
 
@@ -77,11 +77,11 @@ def main():
 
         works = False
         try_ct = 0
-        while not works and try_ct < 20:
-            answer = daemon_whisperer.whisper(socket_name=args.socket, message="SayHello")
+        while try_ct < 20:
+            answer = daemon_whisperer.whisper(socket_name=args.socket,
+                                              message="SayHello")
             print "Daemon answers: ", answer
             if answer == "Hello =)":
-                works = True
                 print "Deamon is now at your commands!"
                 return
             time.sleep(5)

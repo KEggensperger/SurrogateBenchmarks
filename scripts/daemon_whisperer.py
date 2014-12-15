@@ -72,9 +72,11 @@ def main():
     parser.add_argument("--socket", dest="socket", default=None, required=True,
                         help="To which socket listens the daemon?")
     parser.add_argument("--data", dest="data", default=None,
-                        help="In case of trouble, shall I try to resurrect daemon?")
+                        help="In case of trouble, shall I "
+                             "try to resurrect daemon?")
     parser.add_argument("--pcs", dest="pcs", default=None,
-                        help="In case of trouble, shall I try to resurrect daemon?")
+                        help="In case of trouble, shall I "
+                             "try to resurrect daemon?")
     args, unknown = parser.parse_known_args()
 
     socket_dir = args.socket
@@ -93,7 +95,7 @@ def main():
     print unknown
 
     start = time.time()
-    res = evaluate_config(socket_name=socket_dir, params=" ".join(unknown)) # "--fold " + str(args.fold) + " " + " ".join(unknown))
+    res = evaluate_config(socket_name=socket_dir, params=" ".join(unknown))
     
     if surrogate_data is not None and pcs_file is not None and \
             type(res) == str and \
@@ -102,7 +104,7 @@ def main():
         if os.path.exists(socket_dir):
             os.remove(socket_dir)
 
-        cmd = ["daemon_benchmark.py", #"python ",  #os.path.join(os.path.dirname(os.path.realpath(__file__)),  "daemon_benchmark.py"),
+        cmd = ["daemon_benchmark.py",
                "--socket", socket_dir, "--data", surrogate_data,
                "--pcs", pcs_file, "--daemon"]
         p = subprocess.Popen(cmd)
