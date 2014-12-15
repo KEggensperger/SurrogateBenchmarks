@@ -23,6 +23,7 @@ import sys
 from Surrogates.DataExtraction.handle_configurations import get_cat_val_map
 import numpy
 
+
 class RegressionBaseClass(object):
 
     _model = None

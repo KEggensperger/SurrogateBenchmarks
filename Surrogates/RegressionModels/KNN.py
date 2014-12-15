@@ -30,6 +30,7 @@ from sklearn.cross_validation import train_test_split
 from sklearn.grid_search import ParameterSampler
 from sklearn.neighbors import KNeighborsRegressor
 
+
 class KNN(ScikitBaseClass.ScikitBaseClass):
 
     def __init__(self, sp, encode, rng=1, **kwargs):

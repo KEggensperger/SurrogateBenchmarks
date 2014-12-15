@@ -38,7 +38,8 @@ from Surrogates.DataExtraction.data_util import read_csv
 class LassoRegression(ScikitBaseClass.ScikitBaseClass):
 
     def __init__(self, sp, encode, rng=1, **kwargs):
-        ScikitBaseClass.ScikitBaseClass.__init__(self, sp=sp, encode=encode, rng=rng, **kwargs)
+        ScikitBaseClass.ScikitBaseClass.__init__(self, sp=sp, encode=encode,
+                                                 rng=rng, **kwargs)
         self._name = "RidgeRegression " + str(encode)
 
     def _random_search(self, random_iter, x, y):
@@ -50,7 +51,9 @@ class LassoRegression(ScikitBaseClass.ScikitBaseClass):
             sys.stdout.write("Do a random search %d times" % random_iter)
             param_dist = {"alpha": uniform(loc=0.0001, scale=10-0.0001)}
             param_list = [{"alpha": alpha}, ]
-            param_list.extend(list(ParameterSampler(param_dist, n_iter=random_iter-1, random_state=self._rng)))
+            param_list.extend(list(ParameterSampler(param_dist,
+                                                    n_iter=random_iter-1,
+                                                    random_state=self._rng)))
             for idx, d in enumerate(param_list):
                 lasso = Lasso(alpha=d["alpha"],
                               fit_intercept=True,
@@ -62,7 +65,9 @@ class LassoRegression(ScikitBaseClass.ScikitBaseClass):
                               warm_start=False,
                               positive=False)
 
-                train_x, test_x, train_y, test_y = train_test_split(x, y, test_size=0.5, random_state=self._rng)
+                train_x, test_x, train_y, test_y = \
+                    train_test_split(x, y, test_size=0.5,
+                                     random_state=self._rng)
                 lasso.fit(train_x, train_y)
                 sc = lasso.score(test_x, test_y)
                 # Tiny output
@@ -111,61 +116,3 @@ class LassoRegression(ScikitBaseClass.ScikitBaseClass):
         duration = time.time() - start
         self._training_finished = True
         return duration
-
-
-def test():
-    from sklearn.metrics import mean_squared_error
-    import Surrogates.DataExtraction.pcs_parser as pcs_parser
-    sp = pcs_parser.read(file("/home/eggenspk/Surrogates/Data_extraction/Experiments2014/hpnnet/smac_2_06_01-dev/nips2011.pcs"))
-    # Read data from csv
-    header, data = read_csv("/home/eggenspk/Surrogates/Data_extraction/hpnnet_nocv_convex_all/hpnnet_nocv_convex_all_fastrf_results.csv",
-                            has_header=True, num_header_rows=3)
-    para_header = header[0]
-    type_header = header[1]
-    cond_header = header[2]
-    checkpoint = hash(numpy.array_repr(data))
-    assert checkpoint == 246450380584980815
-
-    model = LassoRegression(sp=sp, encode=False, debug=True)
-    x_train_data = data[:1000, :-2]
-    y_train_data = data[:1000, -1]
-    x_test_data = data[1000:, :-2]
-    y_test_data = data[1000:, -1]
-
-    model.train(x=x_train_data, y=y_train_data, param_names=para_header, rng=1)
-
-    y = model.predict(x=x_train_data[1, :])
-    print "Is: %100.70f, Should: %f" % (y, y_train_data[1])
-    assert y[0] == 0.321388102019576071821660434579825960099697113037109375
-
-    print "Predict whole data"
-    y_whole = model.predict(x=x_test_data)
-    mse = mean_squared_error(y_true=y_test_data, y_pred=y_whole)
-    print "MSE: %100.70f" % mse
-    assert mse == 0.00851109857254793433778417011126293800771236419677734375
-
-    print "Soweit so gut"
-
-    # Try the same with encoded features
-    model = LassoRegression(sp=sp, encode=True, debug=True)
-    #print data[:10, :-2]
-    model.train(x=x_train_data, y=y_train_data, param_names=para_header, rng=1)
-
-    y = model.predict(x=x_train_data[1, :])
-    print "Is: %100.70f, Should: %f" % (y, y_train_data[1])
-    assert y[0] == 0.318432843840318391404053954829578287899494171142578125
-
-    print "Predict whole data"
-    y_whole = model.predict(x=x_test_data)
-    mse = mean_squared_error(y_true=y_test_data, y_pred=y_whole)
-    print "MSE: %100.70f" % mse
-    assert mse == 0.00836139846303437204999564613672191626392304897308349609375
-
-    assert hash(numpy.array_repr(data)) == checkpoint
-
-
-if __name__ == "__main__":
-    outer_start = time.time()
-    test()
-    dur = time.time() - outer_start
-    print "TESTING TOOK: %f sec" % dur
