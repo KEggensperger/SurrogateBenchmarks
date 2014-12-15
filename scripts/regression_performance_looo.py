@@ -3,7 +3,6 @@
 from argparse import ArgumentParser
 
 import os
-import tempfile
 
 import numpy
 RNG = 1
@@ -57,14 +56,16 @@ def main():
     parser.add_argument("-r", dest="num_random", default=100, type=int,
                         help="If randomsearch is available, how many runs?")
     parser.add_argument("-m", "--model", dest="model", default="all",
-                        help="Train only one model?", choices=["ArcGP", "RFstruct", "Fastrf", "GaussianProcess",
-                                                               "GradientBoosting", "KNN", "LassoRegression",
-                                                               "LinearRegression", "NuSupportVectorRegression",
-                                                               "RidgeRegression", "SupportVectorRegression",
-                                                               "RandomForest"])
+                        help="Train only one model?",
+                        choices=[#"ArcGP", "RFstruct", "Fastrf",
+                        "GaussianProcess", "GradientBoosting", "KNN",
+                        "LassoRegression", "LinearRegression",
+                        "NuSupportVectorRegression", "RidgeRegression",
+                        "SupportVectorRegression", "RandomForest"])
     parser.add_argument("--pcs", dest="pcs", default=None, required=True,
                         help="PCS file")
-    parser.add_argument("--encode", dest="encode", default=False, action="store_true")
+    parser.add_argument("--encode", dest="encode", default=False,
+                        action="store_true")
     
     args, unknown = parser.parse_known_args()
 
@@ -101,9 +102,10 @@ def main():
     if model.maximum_number_train_data() < train_data_x.shape[0]:
         max_n = model.maximum_number_train_data()
         print "Limited model, reducing #data from %d" % train_data_x.shape[0]
-        train_data_x, _n_x, train_data_y, _n_y = cross_validation.train_test_split(train_data_x, train_data_y,
-                                                                                   train_size=max_n,
-                                                                                   random_state=RNG)
+        train_data_x, _n_x, train_data_y, _n_y = \
+            cross_validation.train_test_split(train_data_x, train_data_y,
+                                              train_size=max_n,
+                                              random_state=RNG)
         print "to %d" % train_data_x.shape[0]
     else:
         print "Reducing data not neccessary"
@@ -112,10 +114,13 @@ def main():
 
     print "Training took %fsec" % dur
 
-    _header, test_data = read_csv(args.testdata, has_header=True, num_header_rows=3)
+    _header, test_data = read_csv(args.testdata, has_header=True,
+                                  num_header_rows=3)
     assert para_header == _header[0]
     assert type_header == _header[1]
     assert cond_header == _header[2]
+    assert(data_y_hash == hash(data_y.tostring()) and
+           data_x_hash == hash(numpy.array_repr(data_x)))
      # Cut out the objective
     test_data_x = test_data[:, :-2]
     test_predictions = model.predict(x=test_data_x, tol=10)
@@ -130,6 +135,7 @@ def main():
     save_one_line_to_csv(model_test_fn, test_predictions, model_type)
 
 
+
 def fetch_model(model_name):
     options = {"ArcGP": ArcGP.ArcGP,
                "RFstruct": RFstruct.RFstruct,
@@ -139,9 +145,11 @@ def fetch_model(model_name):
                "KNN": KNN.KNN,
                "LassoRegression": LassoRegression.LassoRegression,
                "LinearRegression": LinearRegression.LinearRegression,
-               "NuSupportVectorRegression": NuSupportVectorRegression.NuSupportVectorRegression,
+               "NuSupportVectorRegression": NuSupportVectorRegression.
+                   NuSupportVectorRegression,
                "RidgeRegression": RidgeRegression.RidgeRegression,
-               "SupportVectorRegression": SupportVectorRegression.SupportVectorRegression,
+               "SupportVectorRegression": SupportVectorRegression.
+                   SupportVectorRegression,
                "RandomForest": RandomForest.RandomForest
                }
     return options[model_name]
