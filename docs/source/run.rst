@@ -59,6 +59,7 @@ Example 1 - Starting a Surrogate Benchmark
     saying it is an SVM, but it is indeed a KNN :-) ) and the time left till it terminates.
 
 #. In a different terminal, you can send a request:
+
     .. code:: bash
 
         cd ..
@@ -96,7 +97,7 @@ Example 1 - Starting a Surrogate Benchmark
 
     ..code:: bash
 
-    daemonize_benchmark.py --socket ~/socketdir/something --stop --pcs `pwd`/onlineLDA/smac_2_06_01-dev/params.pcs
+        daemonize_benchmark.py --socket ~/socketdir/something --stop --pcs `pwd`/onlineLDA/smac_2_06_01-dev/params.pcs
 
 Next you can run your surrogate benchmark as a daemon process.
 
@@ -105,7 +106,7 @@ Example 2 - Starting a daemon
 
 #. Again run the command from above, but without :bash:`--dry`. You won't see any output,
    but you can verify with :bash:`ps -ef | grep daemon_benchmark` that your daemon is running.
-   If not you can check `~/socketdir/somethingdaemon_log.txt` for errors.
+   If not you can check :literal:`${SOCKETDIR}/somethingdaemon_log.txt` for errors.
 
     .. code:: bash
 
@@ -116,10 +117,14 @@ Example 2 - Starting a daemon
 
     .. code:: bash
 
-        daemon_whisperer.py --socket ~/socketdir/something --fold 0 --folds 1 --params -Kappa 0.75 -Tau 512 -S 8192
+        daemon_whisperer.py --socket ${SOCKETDIR}/something --fold 0 --folds 1 --params -Kappa 0.75 -Tau 512 -S 8192
 
     Which should give you the same output as before.
 
-#. The benchmark output can be found in `socketdir/somethingdaemon_log.txt`
+#. The benchmark output can be found in :literal:`${SOCKETDIR}/somethingdaemon_log.txt`
 
-#. To stop the daemon run :bash:`daemonize_benchmark.py --socket socketdir/something --pcs space.pcs --stop`
+#. To stop the daemon run
+
+    ..code:: bash
+
+        daemonize_benchmark.py --socket ${SOCKETDIR} --pcs space.pcs --stop

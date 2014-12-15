@@ -19,7 +19,7 @@ We recommend using a virtualenv, because (A) you can control the version of each
 
 #. Get `virtualenv <http://www.virtualenv.org/en/latest/virtualenv.html#installation>`_,
    then load a freshly created virtualenv. (If you are not familiar with virtualenv,
-   you might want to read `more <http://www.virtualenv.org/en/latest/virtualenv.html)>`_ about it)
+   you might want to read `more <http://virtualenv.readthedocs.org/en/latest/)>`_ about it)
 
     .. code:: bash
 
@@ -37,7 +37,6 @@ We recommend using a virtualenv, because (A) you can control the version of each
         pip install scipy==0.14.0
         pip install matplotlib
         pip install scikit-learn==0.15.1
-        pip install matplotlib
 
    This may take some time. Afterwards you can verify having those libs installed with:
 
@@ -102,3 +101,6 @@ Install the Surrogate Benchmark Library
     .. code:: python
 
         python setup.py test
+
+**NOTE**: If you cannot install the library, because you cannot upgrade `scikit-learn`, `numpy`, `scipy`, etc.
+Make sure some version of these modules is installed and uncomment the respective lines in `install_requires`.
