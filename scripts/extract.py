@@ -22,7 +22,8 @@ def build_header(sp, num_folds=1, encode=False):
         header.append("fold")
 
     for para in sp:
-        if isinstance(sp[para],  Surrogates.DataExtraction.configuration_space.CategoricalHyperparameter):
+        if isinstance(sp[para],  Surrogates.DataExtraction.configuration_space.
+                      CategoricalHyperparameter):
             if encode:
                 for choice in sp[para].choices:
                     header.append("%s_%s" % (para, choice))
@@ -41,12 +42,18 @@ def main():
     args, unknown = parser.parse_known_args()
 
     sp = Surrogates.DataExtraction.pcs_parser.read(file(args.pcs))
-    logmap = Surrogates.DataExtraction.handle_configurations.get_log_to_uniform_map(sp)
-    unimap = Surrogates.DataExtraction.handle_configurations.get_uniform_to_log_map(sp)
-    dflt = Surrogates.DataExtraction.handle_configurations.get_default_values(sp)
-    cond_dict = Surrogates.DataExtraction.handle_configurations.get_cond_dict(sp)
-    logdict = Surrogates.DataExtraction.handle_configurations.get_logparams(args.pcs)
-    catdict = Surrogates.DataExtraction.handle_configurations.get_cat_val_map(sp)
+    logmap = Surrogates.DataExtraction.handle_configurations.\
+        get_log_to_uniform_map(sp)
+    unimap = Surrogates.DataExtraction.handle_configurations.\
+        get_uniform_to_log_map(sp)
+    dflt = Surrogates.DataExtraction.handle_configurations.\
+        get_default_values(sp)
+    cond_dict = Surrogates.DataExtraction.handle_configurations.\
+        get_cond_dict(sp)
+    logdict = Surrogates.DataExtraction.handle_configurations.\
+        get_logparams(args.pcs)
+    catdict = Surrogates.DataExtraction.handle_configurations.\
+        get_cat_val_map(sp)
 
     header = build_header(sp, num_folds=1, encode=False)
 
@@ -82,23 +89,28 @@ def main():
                     # Remove a trailing minus
                     tmp_i = i[1:]
 
-                if isinstance(sp[unimap[tmp_i]], Surrogates.DataExtraction.configuration_space.CategoricalHyperparameter):
+                if isinstance(sp[unimap[tmp_i]], Surrogates.DataExtraction.
+                              configuration_space.CategoricalHyperparameter):
                     # This is a categorical hyperpara
                     #print tmp_i
-                    clean_dict[tmp_i] = trl['params'][i].strip(" ").strip("'").strip('"') #cat[i][trl['params'][i].strip(" ").strip("'").strip('"')]
+                    clean_dict[tmp_i] = trl['params'][i].strip(" ").\
+                        strip("'").strip('"')
                 else:
                     print tmp_i
-                    clean_dict[tmp_i] = Surrogates.DataExtraction.handle_configurations.convert_to_number(trl['params'][i])
+                    clean_dict[tmp_i] = Surrogates.DataExtraction.\
+                        handle_configurations.convert_to_number(trl['params'][i])
             #print "CLEAN", clean_dict
             # Unlog parameter
-            clean_dict = Surrogates.DataExtraction.handle_configurations.put_on_uniform_scale(clean_dict, sp, unimap, logdict)
+            clean_dict = Surrogates.DataExtraction.handle_configurations.\
+                put_on_uniform_scale(clean_dict, sp, unimap, logdict)
 
             #print "AFTER Unlogging:"
             #print clean_dict
 
             #print
             #print cond_dict
-            clean_dict = Surrogates.DataExtraction.handle_configurations.remove_inactive(clean_dict, cond_dict)
+            clean_dict = Surrogates.DataExtraction.handle_configurations.\
+                remove_inactive(clean_dict, cond_dict)
             #sys.exit(1)
             #print "AFTER removing inactive:"
             #print clean_dict
@@ -117,9 +129,9 @@ def main():
                     timeout_counter += 1
                     continue
                 #(TODO): Right now we accept also crashed runs or
-                #(TODO): timeout runs which have a finite result of "max_result_on_crash"
+                #(TODO): timeout runs which have a finite result of
+                #  "max_result_on_crash"
                 if not np.isfinite(res) or not np.isfinite(dur):
-                    # print "%s (res) or %s (dur) is not finite" % (str(res), str(dur))
                     infinite_counter += 1
                     continue
 
@@ -156,7 +168,8 @@ def main():
     type_header = list(["CAT", ])
     cond_header = list(["FALSE"])
     for p in header[1:]:
-        if isinstance(sp[p],  Surrogates.DataExtraction.configuration_space.CategoricalHyperparameter):
+        if isinstance(sp[p],  Surrogates.DataExtraction.configuration_space.
+                      CategoricalHyperparameter):
             type_header.append("CAT")
         else:
             assert sp[p].base is None
@@ -164,7 +177,9 @@ def main():
 
         if p in cond_dict:
             # print ["%s=%s" % (c[0], "OR".join(str(c[1]))) for c in cond[p]]
-            cond_str = "AND".join(["%s=%s" % (c[0], "OR".join([str(i) for i in c[1]])) for c in cond_dict[p]])
+            cond_str = "AND".join(["%s=%s" %
+                                   (c[0], "OR".join([str(i) for i in c[1]]))
+                                   for c in cond_dict[p]])
             cond_header.append(cond_str)
         else:
             cond_header.append("FALSE")
@@ -174,14 +189,12 @@ def main():
         param_data[row_idx].append(durations[row_idx])
         param_data[row_idx].append(results[row_idx])
 
-
     header.append('duration')
     header.append('performance')
     type_header.append('TARGET')
     type_header.append('TARGET')
     cond_header.append('TARGET')
     cond_header.append('TARGET')
-
 
     print "-------"
     print
@@ -197,7 +210,8 @@ def main():
         fn = args.save + '_fastrf_results.csv'
         print "Save to %s" % fn
         with open(fn, 'wb') as csvfile:
-            result_writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            result_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
+                                       quoting=csv.QUOTE_MINIMAL)
             result_writer.writerow([i for i in header])
             result_writer.writerow([i for i in type_header])
             result_writer.writerow([i for i in cond_header])
@@ -206,16 +220,20 @@ def main():
                 line = ["%s" % str(i) for i in param_data[row]]
                 result_writer.writerow(line)
 
-
     # Now replace cat params with numbers
     for row_idx, row in enumerate(param_data):
         for p_idx, p in enumerate(header):
-            if type_header[p_idx] == "TARGET" or p == "fold" or type_header[p_idx] == "CONT":
+            if type_header[p_idx] == "TARGET" or p == "fold" or \
+                    type_header[p_idx] == "CONT":
                 continue
-            elif isinstance(sp[p],  Surrogates.DataExtraction.configuration_space.CategoricalHyperparameter):
-                param_data[row_idx][p_idx] = catdict[p][param_data[row_idx][p_idx]]
+            elif isinstance(sp[p],
+                            Surrogates.DataExtraction.configuration_space.
+                            CategoricalHyperparameter):
+                param_data[row_idx][p_idx] = \
+                    catdict[p][param_data[row_idx][p_idx]]
             else:
-                raise ValueError("Don't know that para type: %s" % type_header[p_idx])
+                raise ValueError("Don't know that para type: %s" %
+                                 type_header[p_idx])
     param_data = np.array(param_data)
 
     # Now write down spear_cond version
@@ -233,7 +251,8 @@ def main():
         fn = args.save + '_spear_cond_results.csv'
         print "Save to %s" % fn
         with open(fn, 'wb') as csvfile:
-            result_writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            result_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
+                                       quoting=csv.QUOTE_MINIMAL)
             result_writer.writerow([i for i in header])
             result_writer.writerow([i for i in type_header])
             result_writer.writerow([i for i in cond_header])
@@ -241,7 +260,6 @@ def main():
             for row in range(results.shape[0]):
                 line = ["%s" % str(i) for i in param_data[row]]
                 result_writer.writerow(line)
-
 
     checkpoint = np.array(param_data[:, -2:], copy=True)
 
@@ -256,7 +274,8 @@ def main():
             new_para_header.append(para)
             new_type_header.append("TARGET")
             new_cond_header.append("TARGET")
-            conc = np.array(param_data[:, p_idx].reshape([param_data.shape[0], 1]), copy=True)
+            conc = np.array(param_data[:, p_idx].
+                            reshape([param_data.shape[0], 1]), copy=True)
             new_data = np.hstack([new_data, conc])
             continue
 
@@ -281,16 +300,19 @@ def main():
             if new_data is None:
                 new_data = np.array(param_data[:, p_idx], copy=True)
             else:
-                conc = np.array(param_data[:, p_idx].reshape([param_data.shape[0], 1]), copy=True)
+                conc = np.array(param_data[:, p_idx].
+                                reshape([param_data.shape[0], 1]), copy=True)
                 new_data = np.hstack([new_data, conc])
             continue
 
         encode_ct += 1
         # print "%s is a CAT para" % para
         if para == "fold":
-            encoder = OneHotEncoder(n_values='auto', categorical_features='all', dtype=int)
+            encoder = OneHotEncoder(n_values='auto', categorical_features='all',
+                                    dtype=int)
         else:
-            encoder = OneHotEncoder(n_values=len(catdict[para]), categorical_features='all', dtype=int)  
+            encoder = OneHotEncoder(n_values=len(catdict[para]),
+                                    categorical_features='all', dtype=int)
 
         cat_values = np.array(param_data[:, p_idx]).reshape([param_data.shape[0], 1])
         encoder.fit(cat_values)
@@ -320,14 +342,15 @@ def main():
                 if not done:
                     raise ValueError("Could not retranslate all categorical values")
             
-        #new_para_header.extend(["%s_%d" % (para, val) for val in encoder.active_features_])
-        new_type_header.extend(["CAT" for val in val_range]) #encoder.active_features_])
-        new_cond_header.extend([new_cond for val in val_range]) #encoder.active_features_])
+        new_type_header.extend(["CAT" for val in val_range])
+        new_cond_header.extend([new_cond for val in val_range])
 
     num_vals = sum([1 if i == "CAT" else 0 for i in new_type_header])
-    print "Encoding %d of %d features with %d values" % (encode_ct, len(header), num_vals)
+    print "Encoding %d of %d features with %d values" % \
+          (encode_ct, len(header), num_vals)
     assert new_data.shape[1] == len(header)-encode_ct + num_vals,\
-        "Data shape is %f, but it should be %f" % (new_data.shape[1], len(header)-encode_ct + num_vals)
+        "Data shape is %f, but it should be %f" % \
+        (new_data.shape[1], len(header) - encode_ct + num_vals)
 
     # Overwrite old data
     header = new_para_header
@@ -353,7 +376,8 @@ def main():
         fn = args.save + '_encoded_results.csv'
         print "Save to %s" % fn
         with open(fn, 'wb') as csvfile:
-            result_writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            result_writer = csv.writer(csvfile, delimiter=',', quotechar='|',
+                                       quoting=csv.QUOTE_MINIMAL)
             result_writer.writerow([i for i in header])
             result_writer.writerow([i for i in type_header])
             result_writer.writerow([i for i in cond_header])
