@@ -74,7 +74,7 @@ class LinearRegressionTest(unittest.TestCase):
         #print "MSE: %100.70f" % mse
         if "TRAVISCI" in os.environ:
             # For some reason this gives a different value on TRAVISCI
-            self.assertEqual(mse, 0.009149787600102474)
+            self.assertEqual(mse, 0.0094101260295109904)
             self.assertNotAlmostEqual(mse, 0.0091497876001024742)
 
         else:
@@ -93,7 +93,7 @@ class LinearRegressionTest(unittest.TestCase):
         #print "MSE: %100.70f" % mse
         if "TRAVISCI" in os.environ:
             # For some reason this gives a different value on TRAVISCI
-            self.assertEqual(mse, 0.009149787600102474)
+            self.assertEqual(mse, 0.0094101260295109904)
             self.assertNotAlmostEqual(mse, 0.0091497876001024742)
 
         else:

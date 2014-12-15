@@ -5,7 +5,6 @@ import cPickle
 import os
 import socket
 import sys
-import time
 import traceback
 
 import numpy
@@ -16,7 +15,8 @@ RNG = 1
 numpy.random.seed(RNG)
 
 from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression, \
-     LinearRegression, NuSupportVectorRegression, RidgeRegression, SupportVectorRegression, RandomForest
+     LinearRegression, NuSupportVectorRegression, RidgeRegression, \
+    SupportVectorRegression, RandomForest
 
 # ArcGP, Fastrf, GaussianProcess
 
@@ -97,20 +97,24 @@ def build_input_array(params, other, sp, unimap, logdict, cond_dict, param_names
         tmp_i = i
         if i[0] == "-":
             tmp_i = i[1:]
-        if isinstance(sp[unimap[tmp_i]], Surrogates.DataExtraction.configuration_space.CategoricalHyperparameter):
+        if isinstance(sp[unimap[tmp_i]], Surrogates.DataExtraction.
+                configuration_space.CategoricalHyperparameter):
             clean_dict[tmp_i] = params[i].strip(" ").strip("'").strip('"')
         else:
-            clean_dict[tmp_i] = Surrogates.DataExtraction.handle_configurations.convert_to_number(params[i])
+            clean_dict[tmp_i] = Surrogates.DataExtraction.handle_configurations.\
+                convert_to_number(params[i])
     print "CLEAN", clean_dict
     
     # Unlog parameter
-    clean_dict = Surrogates.DataExtraction.handle_configurations.put_on_uniform_scale(clean_dict, sp, unimap, logdict)
+    clean_dict = Surrogates.DataExtraction.handle_configurations.\
+        put_on_uniform_scale(clean_dict, sp, unimap, logdict)
 
     print "AFTER Unlogging:"
     print clean_dict
     print
     print cond_dict
-    clean_dict = Surrogates.DataExtraction.handle_configurations.remove_inactive(clean_dict, cond_dict)
+    clean_dict = Surrogates.DataExtraction.handle_configurations.\
+        remove_inactive(clean_dict, cond_dict)
 
     # Fold is always the first entry
     if "fold" in other:
@@ -167,15 +171,18 @@ def shutdown_server(s, socket_name):
     return True
 
 
-def run_loop(socket_name, data_name, pcs, timeout_time=20*60, buffer_size=50, end_str="."*10):
+def run_loop(socket_name, data_name, pcs, timeout_time=20*60, buffer_size=50,
+             end_str="."*10):
     # Read stuff we need to build input arrays
     fh = open(data_name, 'r')
     surrogate = cPickle.load(fh)
     fh.close()
 
     sp = surrogate._sp
-    logmap = Surrogates.DataExtraction.handle_configurations.get_log_to_uniform_map(sp)
-    unimap = Surrogates.DataExtraction.handle_configurations.get_uniform_to_log_map(sp)
+    logmap = Surrogates.DataExtraction.handle_configurations.\
+        get_log_to_uniform_map(sp)
+    unimap = Surrogates.DataExtraction.handle_configurations.\
+        get_uniform_to_log_map(sp)
     dflt = Surrogates.DataExtraction.handle_configurations.get_default_values(sp)
     cond_dict = Surrogates.DataExtraction.handle_configurations.get_cond_dict(sp)
     logdict = Surrogates.DataExtraction.handle_configurations.get_logparams(pcs)
@@ -183,7 +190,8 @@ def run_loop(socket_name, data_name, pcs, timeout_time=20*60, buffer_size=50, en
     para_header = surrogate._param_names
 
     if os.path.exists(socket_name):
-        sys.stderr.write("Could not build socket in %s, file already exists\n" % socket_name)
+        sys.stderr.write("Could not build socket in %s, file already exists\n" %
+                         socket_name)
         return
 
     sys.stderr.write("Arrived in function, building socket on %s" % socket_name)
@@ -202,7 +210,8 @@ def run_loop(socket_name, data_name, pcs, timeout_time=20*60, buffer_size=50, en
     evaluate_on_last_request = False
     try:
         sys.stdout.write("I'm ready for some requests\n")
-        sys.stdout.write("I'm holding a %s, %s on socket %s\n" % (surrogate, surrogate._name, socket_name))
+        sys.stdout.write("I'm holding a %s, %s on socket %s\n" %
+                         (surrogate, surrogate._name, socket_name))
         while not timeout:
             if timeout_ct == 0:
                 timeout = True
@@ -213,14 +222,16 @@ def run_loop(socket_name, data_name, pcs, timeout_time=20*60, buffer_size=50, en
                 conn, addr = s.accept()
             except socket.timeout:
                 # No one wants to talk to me
-                print "I'm so lonesome, I could cry ... or die in", timeout_blocking*timeout_ct, "sec"
+                print "I'm so lonesome, I could cry ... or die in", \
+                    timeout_blocking*timeout_ct, "sec"
                 timeout_ct -= 1
                 continue
 
             # Now we went somehow further and can reset the counter
             timeout_ct = timeout_ct_limit
 
-            sys.stdout.write("Got a connection: " + str(conn) + " on " + str(addr) + "\n")
+            sys.stdout.write("Got a connection: " + str(conn) + " on " +
+                             str(addr) + "\n")
             data = ""
             while end_str not in data:
                 data += conn.recv(buffer_size)
@@ -249,18 +260,20 @@ def run_loop(socket_name, data_name, pcs, timeout_time=20*60, buffer_size=50, en
             if not ans:
                 try:
                     other_args, params = parse_cli(data.split(" "))
-                    input_array = build_input_array(params=params, other=other_args, sp=sp,
-                                                    unimap=unimap, logdict=logdict,
-                                                    cond_dict=cond_dict, param_names=para_header,
+                    input_array = build_input_array(params=params,
+                                                    other=other_args, sp=sp,
+                                                    unimap=unimap,
+                                                    logdict=logdict,
+                                                    cond_dict=cond_dict,
+                                                    param_names=para_header,
                                                     dflt=dflt)
                 except Exception as e:
                     # Whatever happened we give it back
                     input_array = traceback.format_exc()
                 if type(input_array) == list:
                     # Dirty hack to make stuff work
-                    #if surrogate_type == "spear_gp":
-                    #    param_arr = numpy.array(param_arr).reshape([1, len(param_arr)])
-                    sys.stdout.write("Requesting performance for: %s\n" % str(input_array))
+                    sys.stdout.write("Requesting performance for: %s\n" %
+                                     str(input_array))
                     ans = surrogate.predict(input_array)
                     if isinstance(ans, list) or isinstance(ans, numpy.ndarray):
                         ans = ans[0]
@@ -293,15 +306,17 @@ def main(args, unknown):
     if args.daemon:
         fh = open(args.socket + "daemon_log.txt", 'w')
         with daemon.DaemonContext(stdout=fh, stderr=fh):
-            run_loop(socket_name=args.socket, data_name=data_name, timeout_time=20*60,
-                     pcs=args.pcs, buffer_size=50, end_str="."*10)
+            run_loop(socket_name=args.socket, data_name=data_name,
+                     timeout_time=20*60, pcs=args.pcs, buffer_size=50,
+                     end_str="."*10)
     else:
         run_loop(socket_name=args.socket, data_name=data_name, pcs=args.pcs,
                  timeout_time=20*60, buffer_size=50, end_str="."*10)
 
 if __name__ == "__main__":
     prog = "python daemon_benchmark.py"
-    parser = ArgumentParser(description="Only for internal use. Do not call explicitly.", prog=prog)
+    parser = ArgumentParser(description="Only for internal use. "
+                                        "Do not call explicitly.", prog=prog)
 
     # IPC infos
     parser.add_argument("--socket", dest="socket", default=None, required=True,
@@ -309,7 +324,8 @@ if __name__ == "__main__":
     parser.add_argument("--data", dest="data", default=None, required=True,
                         help="Where is the pickled data for this surrogate?")
     parser.add_argument("--pcs", dest="pcs", required=True)
-    parser.add_argument("--daemon", dest="daemon", default=False, action="store_true",
+    parser.add_argument("--daemon", dest="daemon", default=False,
+                        action="store_true",
                         help="Run as daemon")
 
     outer_args, outer_unknown = parser.parse_known_args()
