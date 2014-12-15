@@ -13,7 +13,7 @@ from Surrogates.DataExtraction import pcs_parser
 # from Surrogates.RegressionModels import ArcGP, RFstruct
 from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression
 from Surrogates.RegressionModels import LinearRegression, RidgeRegression
-from Surrogates.RegressionModels import SupportVectorRegression #, GaussianProcess,
+from Surrogates.RegressionModels import SupportVectorRegression, GaussianProcess,
 from Surrogates.RegressionModels import RandomForest, NuSupportVectorRegression
 
 __author__ = 'eggenspk'
@@ -24,14 +24,14 @@ def main():
     parser = ArgumentParser(description="", prog=prog)
 
     # Data stuff for training surrogate
-    parser.add_argument("-m", "--model", dest="model", default=None, required=True,
+    parser.add_argument("-m", "--model", dest="model", default=None,
+                        required=True,
                         help="What model?",
                         choices=[#"ArcGP", "RFstruct",
-                                 # "GaussianProcess",
-                                 "GradientBoosting", "KNN", "LassoRegression",
-                                 "LinearRegression", "SupportVectorRegression",
-                                 "RidgeRegression", "NuSupportVectorRegression",
-                                 "RandomForest"])
+                                 "GaussianProcess", "GradientBoosting", "KNN",
+                                 "LassoRegression", "LinearRegression",
+                                 "SupportVectorRegression", "RidgeRegression",
+                                 "NuSupportVectorRegression", "RandomForest"])
     parser.add_argument("--data", dest="data_fn", default=None, required=True,
                         help="Where is the csv with training data?")
     parser.add_argument("--pcs", dest="pcs", default=None, required=False,
@@ -110,14 +110,16 @@ def main():
 def fetch_model(model_name):
     options = {#"ArcGP": ArcGP.ArcGP,
                #"RFstruct": RFstruct.RFstruct,
-               #"GaussianProcess": GaussianProcess.GaussianProcess,
+               "GaussianProcess": GaussianProcess.GaussianProcess,
                "GradientBoosting": GradientBoosting.GradientBoosting,
                "KNN": KNN.KNN,
                "LassoRegression": LassoRegression.LassoRegression,
                "LinearRegression": LinearRegression.LinearRegression,
-               "NuSupportVectorRegression": NuSupportVectorRegression.NuSupportVectorRegression,
+               "NuSupportVectorRegression": NuSupportVectorRegression.
+                   NuSupportVectorRegression,
                "RidgeRegression": RidgeRegression.RidgeRegression,
-               "SupportVectorRegression": SupportVectorRegression.SupportVectorRegression,
+               "SupportVectorRegression": SupportVectorRegression.
+                   SupportVectorRegression,
                "RandomForest": RandomForest.RandomForest
               }
     return options[model_name]
