@@ -13,7 +13,7 @@ from Surrogates.DataExtraction import pcs_parser
 # from Surrogates.RegressionModels import ArcGP, RFstruct
 from Surrogates.RegressionModels import GradientBoosting, KNN, LassoRegression
 from Surrogates.RegressionModels import LinearRegression, RidgeRegression
-from Surrogates.RegressionModels import SupportVectorRegression, GaussianProcess,
+from Surrogates.RegressionModels import SupportVectorRegression, GaussianProcess
 from Surrogates.RegressionModels import RandomForest, NuSupportVectorRegression
 
 __author__ = 'eggenspk'
