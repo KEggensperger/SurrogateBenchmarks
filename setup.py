@@ -90,7 +90,7 @@ setup(
                       'networkx',
                       'scipy==0.14.0',
                       'pyparsing',
-                      #'nose',
+                      'nose',
                       'scikit-learn==0.15.1',
                       'python-daemon'
                       ],
