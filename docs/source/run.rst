@@ -95,7 +95,7 @@ Example 1 - Starting a Surrogate Benchmark
 #.  You can now play around with the surrogate and send different requests. You can follow the requests in both terminal windows.
     When you are finished you can either manually kill the benchmark process with :literal:`ctr+C` or send the request to stop the process:
 
-    ..code:: bash
+    .. code:: bash
 
         daemonize_benchmark.py --socket ~/socketdir/something --stop --pcs `pwd`/onlineLDA/smac_2_06_01-dev/params.pcs
 
@@ -125,6 +125,8 @@ Example 2 - Starting a daemon
 
 #. To stop the daemon run
 
-    ..code:: bash
-
+    .. code:: bash
+    
         daemonize_benchmark.py --socket ${SOCKETDIR} --pcs space.pcs --stop
+        
+        
