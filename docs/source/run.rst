@@ -14,7 +14,7 @@ For debugging reasons it is also possible to start this process without creating
 
 ``daemon_whisperer.py``
     can talk to the daemon and is used to request performance predictions from the surrogate benchmark. This script implements the same interface as
-    all the HPOlib benchmarks. It also implements a **fallback functionality*, which tries to resurrect the daemon process if it is not running.
+    all the HPOlib benchmarks. It also implements a **fallback functionality**, which tries to resurrect the daemon process if it is not running.
 
 Example 1 and 2 will show how to use these scripts
 
