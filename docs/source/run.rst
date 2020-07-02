@@ -28,7 +28,7 @@ Example 1 - Starting a Surrogate Benchmark
 
    .. code:: bash
 
-        wget www.automl.org/downloads/surrogate/onlineLDA_surrogate.tar.gz
+        wget www.automl.org/legacy/downloads/surrogate/onlineLDA_surrogate.tar.gz
         tar -xf onlineLDA_surrogate.tar.gz
         file `pwd`/onlineLDA/models/ENCODED_onlineLDA_all_KNN
         MODELNAME=`pwd`/onlineLDA/models/ENCODED_onlineLDA_all_KNN
