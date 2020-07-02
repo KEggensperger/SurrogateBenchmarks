@@ -14,7 +14,7 @@ For debugging reasons it is also possible to start this process without creating
 
 ``daemon_whisperer.py``
     can talk to the daemon and is used to request performance predictions from the surrogate benchmark. This script implements the same interface as
-    all the HPOlib benchmarks. It also implements a **fallback functionality*, which tries to resurrect the daemon process if it is not running.
+    all the HPOlib benchmarks. It also implements a **fallback functionality**, which tries to resurrect the daemon process if it is not running.
 
 Example 1 and 2 will show how to use these scripts
 
@@ -95,7 +95,7 @@ Example 1 - Starting a Surrogate Benchmark
 #.  You can now play around with the surrogate and send different requests. You can follow the requests in both terminal windows.
     When you are finished you can either manually kill the benchmark process with :literal:`ctr+C` or send the request to stop the process:
 
-    ..code:: bash
+    .. code:: bash
 
         daemonize_benchmark.py --socket ~/socketdir/something --stop --pcs `pwd`/onlineLDA/smac_2_06_01-dev/params.pcs
 
@@ -125,6 +125,6 @@ Example 2 - Starting a daemon
 
 #. To stop the daemon run
 
-    ..code:: bash
-
+    .. code:: bash
+    
         daemonize_benchmark.py --socket ${SOCKETDIR} --pcs space.pcs --stop
