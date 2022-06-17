@@ -86,7 +86,7 @@ setup(
     author='Katharina Eggensperger',
     python_requires='==2.7',
     install_requires=['argparse',
-                      'numpy==1.8.1',
+                      'numpy==1.21.0',
                       #'matplotlib',
                       'networkx==2.2',
                       'scipy==0.14.0',
